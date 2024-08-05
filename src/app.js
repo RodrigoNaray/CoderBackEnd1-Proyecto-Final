@@ -6,6 +6,11 @@ import handlebars from "express-handlebars";
 import { Server } from "socket.io";
 import productManager from "./dao/fileSystem/productManager.js";
 import { connectMongoDB } from "./config/mongoDB.config.js";
+import session from "express-session";
+import envs from "./config/envs.config.js";
+import passport from "passport";
+import { initializePassport } from "./config/passport.config.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
@@ -13,20 +18,33 @@ connectMongoDB();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.engine("handlebars", handlebars.engine()); 
-app.set("views", __dirname + "/views"); 
-app.set("view engine", "handlebars"); 
+app.engine("handlebars", handlebars.engine()); // Inicia el motor del la plantilla
+app.set("views", __dirname + "/views"); // Indicamos que ruta se encuentras las vistas
+app.set("view engine", "handlebars"); // Indicamos con que motor vamos a utilizar las vistas 
 app.use(express.static("public"));
+app.use(cookieParser());
+app.use(
+  session({
+    secret: envs.SECRET_CODE, // palabra secreta
+    resave: true, // Mantiene la session activa, si esta en false la session se cierra en un cierto tiempo
+    saveUninitialized: true, // Guarda la session
+  })
+);
 
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
+//Rutas de la API
 app.use("/api", routes);
 
+
+//Rutas de las vistas
 app.use("/", viewsRoutes)
 
-const PORT = 8080;
 
-const httpServer = app.listen(PORT, () => {
-  console.log(`Servidor escuchando en el puerto ${PORT} , Link: http://localhost:${PORT}/`);
+const httpServer = app.listen(envs.PORT, () => {
+  console.log(`Servidor escuchando en el puerto ${envs.PORT} , Link: http://localhost:${envs.PORT}/`);
 });
 
 export const io = new Server(httpServer);

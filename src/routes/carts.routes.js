@@ -1,6 +1,7 @@
 import { Router } from "express";
 import cartDao from "../dao/mongoDB/cart.dao.js";
 import { checkProductAndCartExistence } from "../middlewares/checkProductAndCartExistence.js";
+import { isUserCart } from "../middlewares/isUserCart.middleware.js";
 
 
 const router = Router();
@@ -37,7 +38,7 @@ router.get("/:cid", async (req, res) => {
 })
 
 // Este endpoint se encarga de agregar un producto al carrito
-router.post("/:cid/product/:pid",checkProductAndCartExistence, async (req, res) => {
+router.post("/:cid/product/:pid",isUserCart,checkProductAndCartExistence, async (req, res) => {
   try {
     const { cid, pid } = req.params;
 

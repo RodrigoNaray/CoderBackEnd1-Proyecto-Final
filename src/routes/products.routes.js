@@ -1,11 +1,13 @@
 import { Router } from "express";
 import { checkProductData } from "../middlewares/checkProductData.middleware.js";
+import { authorization } from "../middlewares/authorization.middleware.js";
+import { passportCall } from "../middlewares/passport.middleware.js";
 import productDao from "../dao/mongoDB/product.dao.js";
 
 const router = Router();
 
 // Este endpoint se encarga de obtener todos los productos respetando las opciones de filtrado
-router.get("/", async (req, res) => {
+router.get("/",passportCall("jwt"), authorization("user"), async (req, res) => {
   try{
     
     // Realizamos un filtrado de productos por categoría, estado y opciones de paginación

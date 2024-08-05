@@ -30,7 +30,6 @@ const deleteOne = async (id) => {
 const addProductToCart = async (cid, pid) => {
 
   const cart = await cartModel.findById(cid);
-  console.log("llega hasta Cart: ", cart)
 
   const productInCart = cart.products.find((element) => element.product == pid);
   if (productInCart) {
