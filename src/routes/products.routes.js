@@ -10,16 +10,16 @@ const router = Router();
 router.get("/",passportCall("jwt"), authorization("user"), productsControllers.getAllProducts)
 
 // Este endpoint se encarga de obtener un producto por su id
-router.get("/:pid", productsControllers.getProductById)
+router.get("/:pid", passportCall("jwt"), authorization("user"), productsControllers.getProductById)
 
 // Este endpoint se encarga de crear un producto
-router.post("/",authorization("admin"),checkProductData, productsControllers.createProduct)
+router.post("/",passportCall("jwt"), authorization("admin"),checkProductData, productsControllers.createProduct)
 
 // Este endpoint se encarga de actualizar un producto
-router.put("/:pid",authorization("admin"), productsControllers.updateProduct)
+router.put("/:pid",passportCall("jwt"), authorization("admin"), productsControllers.updateProduct)
 
 // Este endpoint se encarga de eliminar un producto
-router.delete("/:pid", authorization("admin"), productsControllers.deleteOneProduct)
+router.delete("/:pid", passportCall("jwt"), authorization("admin"), productsControllers.deleteOneProduct)
 
 
 export default router

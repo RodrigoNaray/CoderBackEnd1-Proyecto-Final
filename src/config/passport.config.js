@@ -31,7 +31,7 @@ export const initializePassport = () => {
       Nota: passport recibe dos datos el username y el password, en caso de que no tengamos un campo username en nuestro formulario, podemos usar usernameField para definir el campo que usaremos como username.
       */
         try {
-          const { first_name, last_name, age } = req.body;
+          const { first_name, last_name, age , role} = req.body;
           const user = await userRepository.getByEmail(username);
           if (user)
             return done(null, false, { message: "User already exists" });
@@ -43,6 +43,7 @@ export const initializePassport = () => {
             password: createHash(password),
             email: username,
             age,
+            role,
             cart: cart._id,
           };
 

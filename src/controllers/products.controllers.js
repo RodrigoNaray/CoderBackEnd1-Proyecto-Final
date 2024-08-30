@@ -57,7 +57,6 @@ const getProductById = async (req = request, res = response) => {
 const createProduct = async (req = request, res = response) => {
   try{
     const productData = req.body
-    console.log(body)
     const product = await productService.createProduct(productData)
 
     res.status(201).json({status: "success", product})
