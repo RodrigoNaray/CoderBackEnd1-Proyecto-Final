@@ -4,7 +4,7 @@ import viewsRoutes from "./routes/views.routes.js";
 import __dirname from "./dirname.js";
 import handlebars from "express-handlebars";
 import { Server } from "socket.io";
-import productManager from "./dao/fileSystem/productManager.js";
+import productManager from "./persistance/fileSystem/productManager.js";
 import { connectMongoDB } from "./config/mongoDB.config.js";
 import session from "express-session";
 import envs from "./config/envs.config.js";

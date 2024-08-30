@@ -1,6 +1,10 @@
 import dotenv from "dotenv";
 
-dotenv.config();
+const environment = "DEV";
+
+dotenv.config({
+  path: environment === "PRODUCTION" ? "./.env.prod" : "./.env",
+});
 
 export default {
   PORT: process.env.PORT,

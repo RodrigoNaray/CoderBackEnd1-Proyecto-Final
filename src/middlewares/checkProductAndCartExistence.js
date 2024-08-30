@@ -1,6 +1,6 @@
 import { response, request } from "express";
-import productDao from "../dao/mongoDB/product.dao.js"; 
-import cartDao from "../dao/mongoDB/cart.dao.js";
+import productServices from "../services/product.services.js";
+import cartServices from "../services/cart.services.js";
 
 //El middleware checkProductAndCartExistence se encarga de verificar si un producto y un carrito existen en la base de datos
 
@@ -17,12 +17,12 @@ export const checkProductAndCartExistence = async (req = request, res = response
     
 
     //Verificamos que el producto y el carrito existan en la base de datos
-    const product = await productDao.getById(pid);
+    const product = await productServices.getProductById(pid);
     if (!product) {
       return res.status(400).json({ status: "Error", msg: `No se encontró el producto con el id ${pid}` });
     }
 
-    const cart = await cartDao.getById(cid);
+    const cart = await cartServices.getCartById(cid);
     if (!cart) {
       return res.status(400).json({ status: "Error", msg: `No se encontró el carrito con el id ${cid}` });
     }
