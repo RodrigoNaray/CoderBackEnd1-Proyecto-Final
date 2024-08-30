@@ -13,13 +13,13 @@ router.get("/",passportCall("jwt"), authorization("user"), productsControllers.g
 router.get("/:pid", productsControllers.getProductById)
 
 // Este endpoint se encarga de crear un producto
-router.post("/",checkProductData, productsControllers.createProduct)
+router.post("/",authorization("admin"),checkProductData, productsControllers.createProduct)
 
 // Este endpoint se encarga de actualizar un producto
-router.put("/:pid", productsControllers.updateProduct)
+router.put("/:pid",authorization("admin"), productsControllers.updateProduct)
 
 // Este endpoint se encarga de eliminar un producto
-router.delete("/:pid", productsControllers.deleteOneProduct)
+router.delete("/:pid", authorization("admin"), productsControllers.deleteOneProduct)
 
 
 export default router

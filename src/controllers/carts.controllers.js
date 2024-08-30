@@ -1,4 +1,6 @@
+import { request, response } from "express"
 import cartServices from "../services/cart.services.js"
+import ticketServices from "../services/ticket.services.js"
 
 const createCart = async (req,res) => {
   try{
@@ -16,7 +18,7 @@ const createCart = async (req,res) => {
 const getCartById = async (req, res) => {
   try{
     const { cid } = req.params
-    const cart = await cartServices.getById(cid)
+    const cart = await cartServices.getCartById(cid)
 
     res.status(200).json({status: "success", cart})
 
@@ -32,8 +34,7 @@ const addProductToCart = async (req, res) => {
     const { cid, pid } = req.params;
     const { quantity } = req.body
     
-    
-    const cartUpdate = await cartServices.updateQuantityProductInCart(cid, pid, Number(quantity));
+    const cartUpdate = await cartServices.addProductToCart(cid, pid);
 
     res.status(200).json({ status: "success", payload: cartUpdate });
   } catch (error) {
@@ -82,11 +83,26 @@ const clearProductsToCart = async (req, res) => {
   }
 }
 
+const purchaseCart = async (req = request, res = response) => {
+  try {
+    const { cid } = req.params;
+   
+    const total = await cartServices.purchaseCart(cid);
+    const ticket = await ticketServices.createTicket(req.user.email, total);
+    res.status(200).json({ status: "success", ticket });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ status: "Error", msg: "Error interno del servidor" });
+  }
+}
+
 export default { 
   createCart,
   getCartById,
   addProductToCart,
   deleteProductToCart,
   updateQuantityProductInCart,
-  clearProductsToCart 
+  clearProductsToCart,
+  purchaseCart 
 };
